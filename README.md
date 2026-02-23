@@ -39,10 +39,10 @@ Edge-colored graphs in text format (one edge per line: `u v color`). Lines start
 # Undirected graph
 # Nodes: 1000 Edges: 50000
 # DistinctColors: 10000
-# FromNodeId  ToNodeId  Color
-1   5   42
-1   12  7
-2   8   42
+# FromNodeId ToNodeId Color
+1 5 42
+1 12 7
+2 8 42
 ...
 ```
 
@@ -82,12 +82,12 @@ This generates graphs with varying edge densities (p = 0.4, 0.6, 0.8) and color 
 
 ```bash
 # Basic experiments across core counts
-chmod +x scripts/run_experiments.sh
-scripts/run_experiments.sh
+chmod +x run_experiments.sh
+./run_experiments.sh
 
 # Comprehensive experiments (multiple delta configs, 5 runs each)
-chmod +x scripts/run_comprehensive_experiments.sh
-scripts/run_comprehensive_experiments.sh
+chmod +x run_comprehensive_experiments.sh
+./run_comprehensive_experiments.sh
 ```
 
 Results are saved as CSV files in the `results/` directory.
@@ -103,12 +103,11 @@ When run without `--skip-validation`, the program verifies:
 
 ```
 .
-├── CMakeLists.txt                              Build configuration
-├── rainbow.cpp                                 PG-MRM implementation
-├── generate_erdos_renyi.cpp                    Erdos-Renyi graph generator
-└── scripts/
-    ├── run_experiments.sh                      Basic experiment runner
-    └── run_comprehensive_experiments.sh        Full benchmark suite
+├── CMakeLists.txt                        Build configuration
+├── rainbow.cpp                           PG-MRM implementation
+├── generate_erdos_renyi.cpp              Erdos-Renyi graph generator
+├── run_experiments.sh                    Basic experiment runner
+└── run_comprehensive_experiments.sh      Full benchmark suite
 ```
 
 ## License
