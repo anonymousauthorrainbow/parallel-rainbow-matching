@@ -82,12 +82,12 @@ This generates graphs with varying edge densities (p = 0.4, 0.6, 0.8) and color 
 
 ```bash
 # Basic experiments across core counts
-chmod +x run_experiments.sh
-./run_experiments.sh
+chmod +x scripts/run_experiments.sh
+scripts/run_experiments.sh
 
 # Comprehensive experiments (multiple delta configs, 5 runs each)
-chmod +x run_comprehensive_experiments.sh
-./run_comprehensive_experiments.sh
+chmod +x scripts/run_comprehensive_experiments.sh
+scripts/run_comprehensive_experiments.sh
 ```
 
 Results are saved as CSV files in the `results/` directory.
@@ -106,8 +106,9 @@ When run without `--skip-validation`, the program verifies:
 ├── CMakeLists.txt                        Build configuration
 ├── rainbow.cpp                           PG-MRM implementation
 ├── generate_erdos_renyi.cpp              Erdos-Renyi graph generator
-├── run_experiments.sh                    Basic experiment runner
-└── run_comprehensive_experiments.sh      Full benchmark suite
+└── scripts/
+    ├── run_experiments.sh                Basic experiment runner
+    └── run_comprehensive_experiments.sh  Full benchmark suite
 ```
 
 ## License
