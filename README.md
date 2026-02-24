@@ -1,4 +1,4 @@
-# PG-MRM: Parallel Greedy Algorithm for Maximal Rainbow Matching
+# PG-MRM: A Parallel Greedy Algorithm for Maximal Rainbow Matching
 
 A work-efficient parallel algorithm for computing maximal rainbow matchings on edge-colored graphs, implemented in C++17 using [ParlayLib](https://github.com/cmuparlay/parlaylib).
 
