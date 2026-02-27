@@ -8,16 +8,18 @@ Given an edge-colored graph G = (V, E) with coloring function chi: E -> Q, a **m
 
 The algorithm (PG-MRM) processes edges in **delta-prefixes** of a random priority ordering. Within each prefix, it iterates the following parallel phases until no active edge remains:
 
-1. **Phase 1 (Identify ready edges):** An edge is *ready* if both endpoints are unmatched, its color is unused, and it has the highest priority among active edges at both endpoints. Readiness is checked via per-prefix adjacency lists.
+1. **Phase 1 (Identify ready edges):** An edge is *ready* if both endpoints are unmatched, its color is unused, and it is the minimum priority active edge at both endpoints in the current prefix.
 
-2. **Phase 2 (Claim vertices and color):** Ready edges attempt to claim both endpoints and their color slot using atomic compare-and-swap operations. An edge that fails to claim any resource releases previously claimed resources.
+2. **Phase 2 (Claim colors):** Ready edges write concurrently to a shared color array. Under the Priority CRCW model, the highest-priority ready edge of each color wins the write.
 
-3. **Phase 3 (Deactivate conflicts):** All remaining edges that share an endpoint or color with a newly matched edge are deactivated.
+3. **Phase 3 (Commit winning edges):** Only edges that won the color claim in Phase 2 are committed to the matching, and their endpoints are marked as matched.
+
+4. **Phase 4 (Deactivate conflicting edges):** All remaining edges that share an endpoint or color with a newly matched edge are deactivated.
 
 **Complexity:**
 - Expected work: O(m)
 - Worst-case work: O(m log^2 m)
-- Depth: O(log^3 m) on CRCW PRAM
+- Depth: O(log^4 m / log log m) on CRCW PRAM
 - Dependence depth under random ordering: O(log^2 m) w.h.p.
 
 The algorithm produces the same matching as the sequential greedy algorithm for a given edge ordering, ensuring reproducibility across different numbers of processors.
@@ -60,7 +62,7 @@ Edge-colored graphs in text format (one edge per line: `u v color`). Lines start
 ./build/rainbow <graph_file> <delta> --skip-validation
 ```
 
-### Controlling Parallelism
+## Controlling Parallelism
 
 Set the number of threads via ParlayLib's environment variable:
 
@@ -91,7 +93,6 @@ Results are saved as CSV files in the `results/` directory.
 ## Verification
 
 When run without `--skip-validation`, the program verifies:
-
 - **Distinct colors:** No two matched edges share a color
 - **No shared endpoints:** No two matched edges share a vertex
 - **Edge validity:** All matched edges correspond to edges in the input graph
@@ -100,11 +101,11 @@ When run without `--skip-validation`, the program verifies:
 
 ```
 .
-├── CMakeLists.txt                          Build configuration
-├── rainbow.cpp                             PG-MRM implementation
-├── generate_erdos_renyi.cpp                Erdos-Renyi graph generator
+├── CMakeLists.txt                       Build configuration
+├── rainbow.cpp                          PG-MRM implementation
+├── generate_erdos_renyi.cpp             Erdos-Renyi graph generator
 └── scripts/
-    └── run_comprehensive_experiments.sh    Full benchmark suite
+    └── run_comprehensive_experiments.sh Full benchmark suite
 ```
 
 ## License
